@@ -1,0 +1,6 @@
+port: 10090
+debug: true
+db:
+  path: ./tracker-manager.db
+  log: true
+  prefix: ""
