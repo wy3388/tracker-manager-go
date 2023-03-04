@@ -3,9 +3,12 @@ import {createRouter, createWebHistory} from "vue-router"
 const routes = [
     {
         path: '/',
+        redirect: '/root/tracker',
+    },
+    {
+        path: '/root',
         name: 'Home',
         component: () => import('@/views/Home.vue'),
-        redirect: '/tracker',
         children: [
             {
                 path: 'tracker',
@@ -29,6 +32,10 @@ const routes = [
             }
         ]
     },
+    {
+        path: '/:catchAll(.*)',
+        redirect: '/root/tracker'
+    }
 ]
 
 const router = createRouter({

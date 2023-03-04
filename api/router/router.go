@@ -29,22 +29,53 @@ func New() *fiber.App {
 	}
 
 	app.Use(cors.New())
+	app.Static("/", "./web")
+
+	app.Get("/", func(ctx *fiber.Ctx) error {
+		return ctx.Render("index", nil)
+	})
+
 	v1 := app.Group("api/v1")
+	{
+		sourceGroup := v1.Group("source")
+		{
+			var s api.SourceApi
+			sourceGroup.Get("", s.List)
+			sourceGroup.Put("", s.UpdateById)
+			sourceGroup.Get(":id", s.GetById)
+			sourceGroup.Post("", s.Save)
+			sourceGroup.Delete(":id", s.DeleteById)
+		}
 
-	var source api.SourceApi
-	v1.Get("source", source.List)
-	v1.Put("source", source.UpdateById)
-	v1.Get("source/:id", source.GetById)
-	v1.Post("source/", source.Save)
-	v1.Delete("source/:id", source.DeleteById)
+		trackerGroup := v1.Group("tracker")
+		{
+			var t api.TrackerApi
+			trackerGroup.Get("", t.GetSourceList)
+		}
 
-	var tracker api.TrackerApi
-	v1.Get("tracker", tracker.GetSourceList)
+		syncGroup := v1.Group("sync")
+		{
+			var s api.SyncApi
+			syncGroup.Post("syncTracker", s.SyncTracker)
+			syncGroup.Get("", s.List)
+			syncGroup.Post("deleteByIds", s.DeleteByIds)
+			syncGroup.Get("clear", s.Clear)
+		}
 
-	var sync api.SyncApi
-	v1.Post("sync/syncTracker", sync.SyncTracker)
-	v1.Get("sync", sync.List)
-	v1.Post("sync/deleteByIds", sync.DeleteByIds)
-	v1.Get("sync/clear", sync.Clear)
+		clientGroup := v1.Group("client")
+		{
+			var c api.ClientApi
+			clientGroup.Get("", c.List)
+			clientGroup.Post("", c.Save)
+			clientGroup.Get(":id", c.GetById)
+			clientGroup.Put("", c.UpdateById)
+			clientGroup.Delete(":id", c.DeleteById)
+		}
+	}
+
+	app.Get("/root/*", func(ctx *fiber.Ctx) error {
+		return ctx.Redirect("/")
+	})
+
 	return app
 }

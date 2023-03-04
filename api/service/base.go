@@ -28,7 +28,7 @@ func (Base[T]) List() []*T {
 }
 
 func (Base[T]) Save(t T) error {
-	return db.Create(t).Error
+	return db.Create(&t).Error
 }
 
 func (Base[T]) DeleteById(id string) error {

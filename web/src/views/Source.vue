@@ -121,7 +121,7 @@ const handlerAdd = () => {
       <el-table-column align="center" label="KEY" prop="key"/>
       <el-table-column align="center" label="名称" prop="name"/>
       <el-table-column align="center" label="作者" prop="author"/>
-      <el-table-column align="center" label="是否选中" prop="is_checked" width="80">
+      <el-table-column align="center" label="是否同步" prop="is_checked" width="80">
         <template #default="scope">
           <el-tag :type="scope.row.is_checked === 1 ? 'success' : 'danger'">
             {{ scope.row.is_checked === 1 ? '是' : '否' }}
@@ -152,7 +152,7 @@ const handlerAdd = () => {
       <el-form-item label="URL" prop="url">
         <el-input v-model="data.form.url"/>
       </el-form-item>
-      <el-form-item label="是否选中" prop="is_checked">
+      <el-form-item label="是否同步" prop="is_checked">
         <el-radio-group v-model="data.form.is_checked">
           <el-radio :label="1">是</el-radio>
           <el-radio :label="0">否</el-radio>
