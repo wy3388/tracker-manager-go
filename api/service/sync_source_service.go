@@ -2,6 +2,6 @@ package service
 
 import "tracker-manager-go/model"
 
-type SyncSource struct {
+type SyncSourceService struct {
 	Base[model.SyncSource]
 }

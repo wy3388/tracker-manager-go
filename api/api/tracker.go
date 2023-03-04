@@ -8,11 +8,11 @@ import (
 )
 
 type TrackerApi struct {
-	service.SyncSource
+	service.SyncSourceService
 }
 
 func (t TrackerApi) GetSourceList(ctx *fiber.Ctx) error {
-	syncSources := t.SyncSource.List()
+	syncSources := t.SyncSourceService.List()
 	text := ""
 	for _, syncSource := range syncSources {
 		content := syncSource.Content

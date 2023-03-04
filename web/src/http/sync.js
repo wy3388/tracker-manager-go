@@ -5,8 +5,8 @@ class SyncService {
         return post('sync/syncTracker')
     }
 
-    static async deleteById(params) {
-        return post('sync', params)
+    static async deleteByIds(params) {
+        return post('sync/deleteByIds', params)
     }
 
     static async clear() {

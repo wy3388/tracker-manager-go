@@ -41,5 +41,10 @@ func New() *fiber.App {
 	var tracker api.TrackerApi
 	v1.Get("tracker", tracker.GetSourceList)
 
+	var sync api.SyncApi
+	v1.Post("sync/syncTracker", sync.SyncTracker)
+	v1.Get("sync", sync.List)
+	v1.Post("sync/deleteByIds", sync.DeleteByIds)
+	v1.Get("sync/clear", sync.Clear)
 	return app
 }

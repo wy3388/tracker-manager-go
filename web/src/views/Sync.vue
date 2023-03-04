@@ -31,7 +31,7 @@ const handlerDel = () => {
     cancelButtonText: '取消',
     type: 'warning'
   }).then(() => {
-    SyncService.deleteById(id)
+    SyncService.deleteByIds(id)
         .then(resp => {
           message.show(resp, () => {
             tableRef.value.reloadData()
@@ -64,10 +64,10 @@ const handlerClear = () => {
     <t-table ref="tableRef" :show-page="false" style="margin-top: 5px;" url="sync">
       <el-table-column type="selection" width="55"/>
       <el-table-column align="center" label="序号" type="index" width="80"/>
-      <el-table-column :show-overflow-tooltip="true" label="名称" prop="sourceName"/>
-      <el-table-column label="成功数量" prop="successNum"/>
-      <el-table-column label="失败数量" prop="errorNum"/>
-      <el-table-column align="center" label="同步时间" prop="createTime" width="200"/>
+      <el-table-column :show-overflow-tooltip="true" label="名称" prop="source_name"/>
+      <el-table-column label="成功数量" prop="success_num" width="100" align="center"/>
+      <el-table-column label="失败数量" prop="error_num" width="100" align="center"/>
+      <el-table-column align="center" label="同步时间" prop="create_time" width="200"/>
     </t-table>
   </div>
 </template>
