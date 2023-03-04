@@ -5,8 +5,8 @@ class SourceService {
         return get(`source/${id}`)
     }
 
-    static async updateById(id, params) {
-        return put(`source/${id}`, params)
+    static async updateById(params) {
+        return put(`source`, params)
     }
 
     static async deleteById(id) {

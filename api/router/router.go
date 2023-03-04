@@ -34,6 +34,12 @@ func New() *fiber.App {
 	var source api.SourceApi
 	v1.Get("source", source.List)
 	v1.Put("source", source.UpdateById)
+	v1.Get("source/:id", source.GetById)
+	v1.Post("source/", source.Save)
+	v1.Delete("source/:id", source.DeleteById)
+
+	var tracker api.TrackerApi
+	v1.Get("tracker", tracker.GetSourceList)
 
 	return app
 }

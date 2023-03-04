@@ -24,7 +24,7 @@ export default defineConfig({
     server: {
         proxy: {
             '/request': {
-                target: 'http://127.0.0.1:10090',
+                target: 'http://127.0.0.1:10900',
                 changeOrigin: true,
                 rewrite: path => path.replace(/^\/request/, '')
             }

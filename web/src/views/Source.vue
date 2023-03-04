@@ -19,7 +19,7 @@ let data = reactive({
     name: '',
     author: '',
     url: '',
-    isChecked: 0
+    is_checked: 0
   }
 })
 
@@ -52,7 +52,7 @@ const rowDbClick = (row) => {
         data.form.key = resp.data.key
         data.form.name = resp.data.name
         data.form.author = resp.data.author
-        data.form.isChecked = resp.data.isChecked
+        data.form.is_checked = resp.data.is_checked
         data.form.url = resp.data.url
         data.loading = false
       })
@@ -64,7 +64,7 @@ const submitForm = async (el) => {
     if (!valid) return
     if (data.id !== '') {
       data.form['uuid'] = data.id
-      SourceService.updateById(data.id, data.form)
+      SourceService.updateById(data.form)
           .then(resp => {
             message.show(resp, () => {
               data.id = ''
@@ -74,7 +74,7 @@ const submitForm = async (el) => {
           })
     } else {
       delete data.form['uuid']
-      delete data.form['createTime']
+      delete data.form['create_time']
       SourceService.add(data.form)
           .then(resp => {
             message.show(resp, () => {
@@ -121,14 +121,14 @@ const handlerAdd = () => {
       <el-table-column align="center" label="KEY" prop="key"/>
       <el-table-column align="center" label="名称" prop="name"/>
       <el-table-column align="center" label="作者" prop="author"/>
-      <el-table-column align="center" label="是否选中" prop="isChecked" width="80">
+      <el-table-column align="center" label="是否选中" prop="is_checked" width="80">
         <template #default="scope">
-          <el-tag :type="scope.row.isChecked === 1 ? 'success' : 'danger'">
-            {{ scope.row.isChecked === 1 ? '是' : '否' }}
+          <el-tag :type="scope.row.is_checked === 1 ? 'success' : 'danger'">
+            {{ scope.row.is_checked === 1 ? '是' : '否' }}
           </el-tag>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="添加日期" prop="createTime"/>
+      <el-table-column align="center" label="添加日期" prop="create_time"/>
       <el-table-column align="center" label="操作">
         <template #default="scope">
           <el-button size="small" type="default" @click="rowDbClick(scope.row)">修改</el-button>
@@ -152,8 +152,8 @@ const handlerAdd = () => {
       <el-form-item label="URL" prop="url">
         <el-input v-model="data.form.url"/>
       </el-form-item>
-      <el-form-item label="是否选中" prop="isChecked">
-        <el-radio-group v-model="data.form.isChecked">
+      <el-form-item label="是否选中" prop="is_checked">
+        <el-radio-group v-model="data.form.is_checked">
           <el-radio :label="1">是</el-radio>
           <el-radio :label="0">否</el-radio>
         </el-radio-group>

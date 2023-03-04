@@ -1,4 +1,4 @@
-port: 10090
+port: 10900
 debug: true
 db:
   path: ./tracker-manager.db
