@@ -16,6 +16,10 @@ class ClientService {
     static async deleteById(id) {
         return del(`client/${id}`)
     }
+
+    static async sync(id) {
+        return get(`client/sync/${id}`)
+    }
 }
 
 export {

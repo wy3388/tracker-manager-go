@@ -70,6 +70,14 @@ func New() *fiber.App {
 			clientGroup.Get(":id", c.GetById)
 			clientGroup.Put("", c.UpdateById)
 			clientGroup.Delete(":id", c.DeleteById)
+			clientGroup.Get("sync/:id", c.Sync)
+		}
+
+		clientHistoryGroup := v1.Group("clientHistory")
+		{
+			var c api.ClientHistoryApi
+			clientHistoryGroup.Get("", c.List)
+			clientHistoryGroup.Post("deleteByIds", c.DeleteByIds)
 		}
 	}
 

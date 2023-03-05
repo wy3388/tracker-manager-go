@@ -9,6 +9,7 @@ import (
 )
 
 func main() {
+	println()
 	app := router.New()
 	log.Fatal(app.Listen(fmt.Sprintf(":%d", conf.App.Port)))
 }

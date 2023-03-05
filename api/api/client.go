@@ -61,3 +61,14 @@ func (c ClientApi) DeleteById(ctx *fiber.Ctx) error {
 	}
 	return result.SuccessEmpty(ctx)
 }
+
+func (c ClientApi) Sync(ctx *fiber.Ctx) error {
+	id := ctx.Params("id", "")
+	if id == "" {
+		return result.Fail(ctx, "参数错误")
+	}
+	if err := c.ClientService.Sync(id); err != nil {
+		return result.Fail(ctx, err.Error())
+	}
+	return result.SuccessEmpty(ctx)
+}

@@ -4,10 +4,12 @@ import {nextTick, reactive, ref} from "vue"
 import TAction from "@/components/TAction.vue"
 import {ClientService} from "@/http/client.js"
 import message from "@/utils/message.js"
-import {ElMessageBox} from "element-plus"
+import {ElMessage, ElMessageBox} from "element-plus"
+import {ClientHistoryService} from "@/http/client_history.js"
 
 const formRef = ref()
 const tableRef = ref()
+const tableHistoryRef = ref()
 
 const activeName = ref('client')
 let data = reactive({
@@ -102,6 +104,42 @@ const handlerDel = (id) => {
         })
   })
 }
+
+const handlerSync = (id) => {
+  ElMessageBox.confirm('是否开始同步客户端？', '同步', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning',
+  }).then(() => {
+    ClientService.sync(id)
+        .then(resp => {
+          message.show(resp, () => {
+            tableHistoryRef.value.reloadData()
+          })
+        })
+  })
+}
+
+const handlerHistoryDel = () => {
+  let rows = tableHistoryRef.value.getSelectionRows()
+  let id = rows.map(row => row.uuid)
+  if (id.length < 1) {
+    ElMessage.warning('请选择数据')
+    return
+  }
+  ElMessageBox.confirm('是否删除记录？', '删除', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning',
+  }).then(() => {
+    ClientHistoryService.deleteByIds(id)
+        .then(resp => {
+          message.show(resp, () => {
+            tableHistoryRef.value.reloadData()
+          })
+        })
+  })
+}
 </script>
 
 <template>
@@ -121,7 +159,7 @@ const handlerDel = (id) => {
           <el-table-column align="center" label="添加时间" prop="create_time"/>
           <el-table-column label="操作" align="center">
             <template #default="scope">
-              <el-button size="small" type="success" @click="rowDbClick(scope.row)">同步</el-button>
+              <el-button size="small" type="success" @click="handlerSync(scope.row.uuid)">同步</el-button>
               <el-button size="small" type="default" @click="rowDbClick(scope.row)">修改</el-button>
               <el-button size="small" type="danger" @click="handlerDel(scope.row.uuid)">删除</el-button>
             </template>
@@ -130,12 +168,21 @@ const handlerDel = (id) => {
       </div>
     </el-tab-pane>
     <el-tab-pane label="同步历史" name="history">
-
+      <div style="display: flex;flex-direction: column;">
+        <t-action :show-add-button="false" :show-del-button="true" @handler-del="handlerHistoryDel"/>
+        <t-table ref="tableHistoryRef" :show-page="false" style="margin-top: 5px;" url="clientHistory">
+          <el-table-column type="selection" width="55"/>
+          <el-table-column align="center" label="序号" type="index" width="80"/>
+          <el-table-column label="类型" prop="client_name" align="center"/>
+          <el-table-column label="同步内容" :show-overflow-tooltip="true" prop="tracker_content" align="center"/>
+          <el-table-column align="center" label="同步时间" prop="create_time"/>
+        </t-table>
+      </div>
     </el-tab-pane>
   </el-tabs>
 
   <el-dialog v-model="data.showDialog" :title="data.title" width="30%">
-    <el-form ref="formRef" v-loading="data.loading" :model="data.form" :rules="rules" label-width="auto">
+    <el-form ref="formRef" v-loading="data.loading" :model="data.form" :rules="rules" label-width="60">
       <el-form-item label="类型" prop="name">
         <el-select v-model="data.form.name" style="width: 100%;">
           <el-option label="qBittorrent" value="qBittorrent">qBittorrent</el-option>
